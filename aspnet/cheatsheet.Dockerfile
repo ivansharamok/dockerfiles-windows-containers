@@ -4,10 +4,17 @@ SHELL ["powershell", "-Command", "$ErrorActionPreference = 'Stop'; $ProgressPref
 
 ARG FOO="default value"
 ARG ODBC_PASSWORD
+ARG PROXY_URL
+
+# ================================================================================ #
+# if you need to access domain resources during the image build process, make sure to use gMSA reference in 'docker build' command
+# see example in 'com.contoso.docker.cmd.build.domain' label below
+# ================================================================================ #
 
 LABEL com.contoso.name="contosoapp:aspnet-4.8" `
       com.contoso.description="ASP.NET Framework base image for Contoso app" `
-      com.contoso.docker.cmd.build="docker build --build-arg FOO='my value' --build-arg ODBC_PASSWORD='Secret!' -t contosoapp:aspnet-4.8 -f cheatsheet.Dockerfile ." `
+      com.contoso.docker.cmd.build="docker build --build-arg FOO='my value' --build-arg ODBC_PASSWORD='Secret!' --build-arg PROXY_URL='http://proxy.contoso.com:80' -t contosoapp:aspnet-4.8 -f cheatsheet.Dockerfile ." `
+      com.contoso.docker.cmd.build.domain="docker build --security-opt='credentialspec=file://gMSADockerDev.json' --build-arg FOO='my value' --build-arg ODBC_PASSWORD='Secret!' --build-arg PROXY_URL='http://proxy.contoso.com:80'  -t contosoapp:aspnet-4.8 -f cheatsheet.Dockerfile ." `
       com.contoso.author="github.com/ivansharamok"
 
 # set working directory
@@ -146,7 +153,7 @@ RUN $path='C:\inetpub\wwwroot'; `
 # ================================================================================ #
 # download EXE using corporate proxy and install it (assumes no specific proxy user credential is required)
 # ================================================================================ #
-# RUN Invoke-WebRequest -UseBasicParsing -Proxy 'http://proxy.contoso.com:80' -ProxyUseDefaultCredentials `
+# RUN Invoke-WebRequest -UseBasicParsing -Proxy $env:PROXY_URL -ProxyUseDefaultCredentials `
 #     -Uri 'http://download.microsoft.com/download/2/E/6/2E61CFA4-993B-4DD4-91DA-3737CD5CD6E3/vcredist_x64.exe' `
 #     -OutFile \install\vcredist_x64.exe; `
 #     & \install\vcredist_x64.exe; `
