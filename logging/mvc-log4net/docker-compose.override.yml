@@ -1,0 +1,11 @@
+version: '3.4'
+
+services:
+  mvc-log4net:
+    # image: ${DOCKER_REGISTRY-}mvclog4net:dev
+    ports:
+      - "80"
+networks:
+  default:
+    external:
+      name: nat

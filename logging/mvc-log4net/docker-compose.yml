@@ -1,0 +1,16 @@
+version: '3.4'
+
+services:
+  mvc-log4net:
+    image: ${DOCKER_REGISTRY-}mvclog4net
+    build:
+      context: .\src
+      dockerfile: Dockerfile
+    # entrypoint:
+    # - powershell
+    # - -command
+    # - |
+    #   .\eventlog-reader.ps1 -ServiceName "w3svc" \
+    #   -LogName "Application" \
+    #   -LogSources 'mvc-log4net','.NET*','ASP.NET*','MSDTC*','Microsoft*' \
+    #   -FrequencyInSeconds 2

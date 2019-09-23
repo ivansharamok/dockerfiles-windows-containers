@@ -1,0 +1,4 @@
+#*
+!bin\release\publish\*
+!obj\Docker\publish\*
+!obj\Docker\empty\
